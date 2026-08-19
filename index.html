@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Can We Know Each Other? 💕</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #ff758c, #ff7eb3);
+        overflow: hidden;
+    }
+
+    .card {
+        width: 90%;
+        max-width: 430px;
+        padding: 35px 25px;
+        text-align: center;
+        background: rgba(255,255,255,0.95);
+        border-radius: 25px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 2;
+    }
+
+    .emoji {
+        font-size: 55px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        color: #ff4f81;
+        font-size: 25px;
+        line-height: 1.4;
+        margin-bottom: 25px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    button {
+        border: none;
+        padding: 13px 22px;
+        border-radius: 30px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.25s;
+    }
+
+    #yesBtn {
+        background: #ff4f81;
+        color: white;
+    }
+
+    #noBtn {
+        background: #eeeeee;
+        color: #555;
+    }
+
+    button:hover {
+        transform: scale(1.08);
+    }
+
+    #success {
+        display: none;
+    }
+
+    .heart {
+        position: fixed;
+        bottom: -30px;
+        font-size: 25px;
+        animation: floatUp 5s linear forwards;
+        z-index: 1;
+    }
+
+    @keyframes floatUp {
+        0% {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        100% {
+            transform: translateY(-110vh);
+            opacity: 0;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- QUESTION SCREEN -->
+
+<div class="card" id="questionCard">
+
+    <div class="emoji">🌸</div>
+
+    <h1 id="question">
+        Hiii! Can we know each other? 😊
+    </h1>
+
+    <div class="buttons">
+
+        <button id="yesBtn" onclick="acceptRequest()">
+            💖 Sure, why not?
+        </button>
+
+        <button id="noBtn" onclick="noAttempt()">
+            🙈 Maybe not...
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ACCEPTED SCREEN -->
+
+<div class="card" id="success">
+
+    <div class="emoji">🎉💕</div>
+
+    <h1>Yayyy! Let's get to know each other! 🥰</h1>
+
+    <p>
+        I'm glad you said yes! 🌷
+    </p>
+
+    <p>
+        What's your name? 😊
+    </p>
+
+    <input
+        type="text"
+        id="nameInput"
+        placeholder="Type your name..."
+        style="
+            padding:12px;
+            border-radius:20px;
+            border:1px solid #ddd;
+            width:80%;
+            text-align:center;
+            font-size:16px;
+        "
+    >
+
+    <br><br>
+
+    <button onclick="showName()">
+        💕 Continue
+    </button>
+
+    <p id="nameResult"></p>
+
+</div>
+
+
+<!-- SONG -->
+
+<audio id="loveSong">
+    <source
+        src="./Tamasha_-_Matargashti_mp3_150153117%20(1).mp3"
+        type="audio/mpeg"
+    >
+</audio>
+
+
+<script>
+
+const questions = [
+
+    {
+        question: "Aww, you're shy? Should we at least say hi properly? 👀",
+        yes: "😄 Okay, let's talk!",
+        no: "🙃 I'm still shy..."
+    },
+
+    {
+        question: "Come onnn, just a little conversation? 🥺",
+        yes: "💬 Let's do it!",
+        no: "😏 Not yet..."
+    },
+
+    {
+        question: "What if we start with just your name? 🌷",
+        yes: "💕 Okayyy!",
+        no: "🙈 Nope!"
+    },
+
+    {
+        question: "Maybe we could become good friends? 😊",
+        yes: "🥰 I'd like that!",
+        no: "😂 I'm thinking..."
+    },
+
+    {
+        question: "One chance to know each other? 👉👈❤️",
+        yes: "💖 Okay, let's go!",
+        no: "🙈 Still no!"
+    }
+
+];
+
+let noCount = 0;
+
+
+function noAttempt() {
+
+    if (noCount < questions.length) {
+
+        document.getElementById("question").innerText =
+            questions[noCount].question;
+
+        document.getElementById("yesBtn").innerText =
+            questions[noCount].yes;
+
+        document.getElementById("noBtn").innerText =
+            questions[noCount].no;
+
+        noCount++;
+
+        moveNoButton();
+
+    } else {
+
+        document.getElementById("question").innerText =
+            "Okayyy 😭 I'll stop asking... unless you change your mind? ❤️";
+
+        document.getElementById("yesBtn").innerText =
+            "🥹 Okay, let's talk!";
+
+        document.getElementById("noBtn").innerText =
+            "🙈 Nope";
+
+        moveNoButton();
+    }
+}
+
+
+function moveNoButton() {
+
+    const button = document.getElementById("noBtn");
+
+    const x = Math.random() * 160 - 80;
+    const y = Math.random() * 100 - 50;
+
+    button.style.transform =
+        `translate(${x}px, ${y}px)`;
+}
+
+
+function acceptRequest() {
+
+    // Hide question
+    document.getElementById("questionCard").style.display = "none";
+
+    // Show accepted screen
+    document.getElementById("success").style.display = "block";
+
+    // Start song
+    const song = document.getElementById("loveSong");
+
+    song.currentTime = 0;
+
+    song.play().catch(function(error) {
+        console.log("Audio error:", error);
+    });
+
+    // STOP EXACTLY AT 20 SECONDS
+    setTimeout(function() {
+
+        song.pause();
+        song.currentTime = 0;
+
+    }, 20000);
+
+    // Floating hearts
+    createHearts();
+}
+
+
+function showName() {
+
+    const name =
+        document.getElementById("nameInput").value.trim();
+
+    if (name === "") {
+
+        document.getElementById("nameResult").innerText =
+            "You forgot to tell me your name 😭❤️";
+
+        return;
+    }
+
+    document.getElementById("nameResult").innerText =
+        "Nice to meet you, " + name + " ❤️🥰";
+}
+
+
+function createHearts() {
+
+    setInterval(function() {
+
+        const heart = document.createElement("div");
+
+        heart.className = "heart";
+
+        heart.innerText =
+            ["❤️", "💕", "💗", "💖", "🌸", "🥰"]
+            [Math.floor(Math.random() * 6)];
+
+        heart.style.left =
+            Math.random() * 100 + "vw";
+
+        heart.style.animationDuration =
+            (3 + Math.random() * 3) + "s";
+
+        document.body.appendChild(heart);
+
+        setTimeout(function() {
+            heart.remove();
+        }, 6000);
+
+    }, 500);
+}
+
+</script>
+
+</body>
+</html>
